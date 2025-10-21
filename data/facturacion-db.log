@@ -1,10 +1,44 @@
-/*C4*/SET SCHEMA PUBLIC
+/*C1*/SET SCHEMA SYSTEM_LOBS
+INSERT INTO BLOCKS VALUES(0,2147483647,0)
+COMMIT
+/*C2*/SET SCHEMA PUBLIC
 DISCONNECT
-/*C5*/SET SCHEMA PUBLIC
-INSERT INTO CLIENTE VALUES(1,'Priscila Zuniga',1478,'EL BATAN','PICHINCHA','AV GRANADOS OE344')
+/*C3*/SET SCHEMA PUBLIC
+create table Autor (oid varchar(32) not null, nombre varchar(50), primary key (oid))
+create table Categoria (oid varchar(32) not null, descripcion varchar(50), primary key (oid))
+create table Cliente (numero integer not null, codigoPostal integer, municipio varchar(20), provincia varchar(30), viaPublica varchar(30), nombre varchar(50), primary key (numero))
+create table Factura (oid varchar(32) not null, anyo integer, fecha date, numero integer, observaciones varchar(255), cliente_numero integer not null, primary key (oid))
+create table Factura_detalles (Factura_oid varchar(32) not null, cantidad integer not null, producto_numero integer)
+create table IMAGES (ID varchar(32) not null, GALLERY varchar(32), image varbinary(16777216), primary key (ID))
+create table OXDISCUSSIONCOMMENTS (id varchar(32) not null, comment clob(16777216), discussionId varchar(32), time timestamp, userName varchar(30), primary key (id))
+create table Producto (numero integer not null, descripcion varchar(50), fotos varchar(32), observaciones varchar(255), precio numeric(19,2), autor_oid varchar(32), categoria_oid varchar(32), primary key (numero))
+create table TuPrimeraEntidad (id varchar(32) not null, descripcion varchar(50), fecha date, importe numeric(19,2), primary key (id))
+create index IDXbhlx4vunn24ym1tbrlgq8g30m on OXDISCUSSIONCOMMENTS (discussionId)
+alter table Factura add constraint FKmd10sg74xw8mq3d2m9k2kxual foreign key (cliente_numero) references Cliente
+alter table Factura_detalles add constraint FKe3f314u9v7uw8aktwkjo8473t foreign key (producto_numero) references Producto
+alter table Factura_detalles add constraint FKpl16p1cpo7r84s75asx5db9nq foreign key (Factura_oid) references Factura
+alter table Producto add constraint FKmtkejrnklbkimttu99b9jqufw foreign key (autor_oid) references Autor
+alter table Producto add constraint FKc81rcy0vfdn5ewnap5scabhd3 foreign key (categoria_oid) references Categoria
+INSERT INTO CATEGORIA VALUES('4028e4de9a055fca019a0560620f0000','Libros')
 COMMIT
-INSERT INTO PRODUCTO VALUES(5,'PRUEBA DE FUNCIONAMIENTO','4028e4de99da5ea70199da5f2d8d0002',NULL,'PONER ESPECIAL CUIDADO EN ESTA SECCION',35.00)
+INSERT INTO CATEGORIA VALUES('4028e4de9a055fca019a056075050001','Muebles')
 COMMIT
-INSERT INTO FACTURA VALUES('4028e4de99dc16a20199dc1a59930000',2025,'2025-10-13',2,'',1)
-INSERT INTO FACTURA_DETALLES VALUES('4028e4de99dc16a20199dc1a59930000',0,5)
+INSERT INTO CATEGORIA VALUES('4028e4de9a055fca019a05607f3e0002','Cursos')
+COMMIT
+INSERT INTO CATEGORIA VALUES('4028e4de9a055fca019a056089290003','Otros')
+COMMIT
+INSERT INTO AUTOR VALUES('4028e4de9a055fca019a0560a4180004','Juan Manuel')
+COMMIT
+INSERT INTO AUTOR VALUES('4028e4de9a055fca019a0560b43a0005','Eduardo Erazo')
+COMMIT
+INSERT INTO AUTOR VALUES('4028e4de9a055fca019a0560d5d50006','Mateo Yanez')
+COMMIT
+INSERT INTO PRODUCTO VALUES(1,'Texto de Calculo',NULL,'',12.00,'4028e4de9a055fca019a0560a4180004','4028e4de9a055fca019a0560620f0000')
+COMMIT
+INSERT INTO PRODUCTO VALUES(2,'Curso Lean Startup',NULL,'',50.00,'4028e4de9a055fca019a0560d5d50006','4028e4de9a055fca019a05607f3e0002')
+COMMIT
+INSERT INTO PRODUCTO VALUES(5,'Introduccion JPA',NULL,'',120.00,'4028e4de9a055fca019a0560b43a0005','4028e4de9a055fca019a056089290003')
+COMMIT
+DELETE FROM PRODUCTO WHERE NUMERO=1
+DELETE FROM AUTOR WHERE OID='4028e4de9a055fca019a0560a4180004'
 COMMIT
